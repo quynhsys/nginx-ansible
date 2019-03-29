@@ -1,0 +1,47 @@
+---
+
+- name: add dns
+  command: echo "nameserver 8.8.8.8 \n nameserver 8.8.4.4" >> /etc/resolv.conf
+
+- name: install required yum packages
+  yum: 
+   name: "{{ item }}"
+   state: present
+  with_items:
+    - wget
+    - gcc
+    - gcc-c++
+    - make
+    - perl
+    - perl-devel
+    - perl-ExtUtils-Embed
+    - GeoIP
+    - GeoIP-devel
+    - pcre
+    - pcre-devel
+    - zlib
+    - zlib-devel
+    - openssl
+    - openssl-devel
+    - git
+    - net-tools
+    - vim
+    - bind-utils
+  register: result
+  ignore_errors: True
+  tags:
+   - nginx
+
+- name: Check nginx old version if exist
+  command: "{{ SBIN_PATH }} -v"
+  register: result
+  ignore_errors: True
+  tags:
+    - nginx
+- name: Download nginx1.15.7
+  get_url:
+    url=http://nginx.org/download/nginx-{{NGINX_VERSION}}.tar.gz dest=/tmp/
+  tags:
+   - nginx
+ 
+

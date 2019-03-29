@@ -1,0 +1,2 @@
+[nginx]
+35.224.44.108 ansible_ssh_port=22
